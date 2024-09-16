@@ -25,6 +25,12 @@ def control():
              'param2' : "Value2"
         }
         return data
+
+@app.route('/post_data', methods=['GET', 'POST'])
+def handle_bom():
+    test = request.form.get('value1')
+    print(test)
+    return test
     
 
 

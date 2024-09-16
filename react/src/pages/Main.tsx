@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import '../scss/styles.scss';
+import $ from 'jquery'
 
+interface ITestPost {
+    value1: string;
+}
 
+interface ITestGet {
+    param1: string;
+    param2: string;
+}
 
 
 function Main()
@@ -26,9 +34,10 @@ function Main()
                 if (!response.ok) {
                     throw new Error('Ошибка при выполнении запроса');
                 }
-                const result = await response.json();
-                setVal1(result['param1']);
-                setVal2(result['param2']);
+                const result: ITestGet = await response.json();
+                setVal1(result.param1);
+                setVal2(result.param2);
+                
                 } catch (error) {
                 //setError(error.message);
                 } finally {
@@ -46,6 +55,27 @@ function Main()
             clearInterval(refreshIntervalId);
           };
     });
+
+
+    const ButtonHandler = ()=>
+    {
+        let request:ITestPost = {
+            value1: "Test"
+        };
+
+        $.post("./post_data", request, function(data){
+            // alert("Данные успешно получены");
+            var index;
+
+        })
+        // Обработчик неуспешной отправки данных
+        .fail(function() {
+            alert("Потеря связи с сервером");
+        });
+        // alert( "Handler for `click` called." );
+        
+     
+    };
 
     if (loading)
         {
@@ -78,7 +108,7 @@ function Main()
                     <div className="col-md-12">
                         <p><h3>{val2}</h3></p>
                     </div>
-                    <a href="#" className="btn btn-primary" role = "button">Click me</a>
+                    <a href="#" className="btn btn-primary" onClick={ButtonHandler} role = "button">Click me</a>
                 </div>
             );
     }
