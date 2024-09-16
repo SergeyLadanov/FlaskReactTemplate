@@ -20,18 +20,10 @@ def index():
 
 @app.route('/get_data', methods=['GET', 'POST'])
 def control():
-    try:
-        sock = socket.socket()
-        sock.connect(('localhost', 9090))
-        data = sock.recv(1024)
-        sock.close()
-        data = data.decode()
-    except:
-        #data = "49.1;26.8\r\n09:11 10/06/22\r\n26.7;26.7;\r\n49.1;26.7;\r\n09:00;09:30;\r\n"
-        data = "none;none\r\nnone\r\n"
-    if data is None:
-        return "No data"
-    else:
+        data = {
+             'param1' : "Value1",
+             'param2' : "Value2"
+        }
         return data
     
 
