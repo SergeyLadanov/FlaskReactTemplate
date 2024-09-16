@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import '../scss/styles.scss';
-import $ from 'jquery'; // Импортируем jQuery
+
+import { useFetching } from '../hooks/useFetching';
 
 
 function About()
 {
     const [val1, setVal1] = useState('');
     const [val2, setVal2] = useState('');
-    const [loading, setLoading] = useState(true);
+    //const [loading, setLoading] = useState(true);
+
+    const SucessAjax = (data:any)=>
+    {
+        setVal1(data['param1']);
+        setVal2(data['param2']);
+    }
+
+    const [GetData, loading, err] = useFetching(SucessAjax);
 
 
     useEffect(() => {
-        
-           // Выполняем запрос на сервер при монтировании компонента
-           $.ajax({
-            url: './get_data',
-            method: 'GET',
-            dataType: 'json',
-            success: (response) => {
-                setVal1(response['param1']);
-                setVal2(response['param2']);
-            },
-            error: (jqXHR, textStatus, errorThrown) => {
-              //setError(`Ошибка: ${textStatus}, ${errorThrown}`);
-            },
-            complete: () => {
-              setLoading(false);
-            }
-          });
 
+        GetData('./get_data');
 
         return () => {
             // код выполняется при размонтировании компонента (закрытии)
