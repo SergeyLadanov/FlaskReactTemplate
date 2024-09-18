@@ -1,31 +1,43 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 import '../scss/styles.scss';
 import '../css/offcanvas.css';
 import '../css/index.css';
 
-import Bootstrap from 'bootstrap';
 
 function SwitchTheme()
 {
-    const [theme, setTheme] = useState('auto'); // Стейт для текущей темы
+    const [theme, setThemeState] = useState('auto'); // Стейт для текущей темы
+
+    const ApplyTheme = (theme:string)=>
+    {
+        if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        {
+            document.body.setAttribute('data-bs-theme', 'dark');
+        }
+        else
+        {
+            document.body.setAttribute('data-bs-theme', theme);
+        }
+
+        setThemeState(theme);
+    }
 
     useEffect(() => {
         // Изменение класса body в зависимости от выбранной темы
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
-          setTheme(savedTheme);
-          document.body.setAttribute('data-bs-theme', savedTheme);
+            ApplyTheme(savedTheme);
         } else {
-          document.body.setAttribute('data-bs-theme', theme);
+            ApplyTheme(theme);
         }
     }, [theme]);
 
 
-    const handleThemeChange = (newTheme:any) => {
-        setTheme(newTheme);
+    const handleThemeChange = (newTheme:any) => 
+    {
+        ApplyTheme(newTheme);
         localStorage.setItem('theme', newTheme); // Сохраняем тему в LocalStorage
-        document.body.setAttribute('data-bs-theme', newTheme); // Меняем тему
     };
 
     return(
