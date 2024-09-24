@@ -1,117 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import '../scss/styles.scss';
-import $ from 'jquery'
-
-interface ITestPost {
-    value1: string;
-}
-
-interface ITestGet {
-    param1: string;
-    param2: string;
-}
 
 
-function Main()
+
+
+interface FormData
 {
-    let refreshIntervalId:NodeJS.Timeout;
-
-    const [val1, setVal1] = useState('');
-    const [val2, setVal2] = useState('');
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        
-        refreshIntervalId = setInterval(()=>{
-            console.log("Main...")
-        }, 1000);
+    Val1: string;
+    Val2: string;
+}
 
 
-           // Выполняем запрос на сервер при монтировании компонента
-            const fetchData = async () => {
-                try {
-                const response = await fetch('./get_data');
-                if (!response.ok) {
-                    throw new Error('Ошибка при выполнении запроса');
-                }
-                const result: ITestGet = await response.json();
-                setVal1(result.param1);
-                setVal2(result.param2);
-                
-                } catch (error) {
-                //setError(error.message);
-                } finally {
-                setLoading(false);
-                }
-            };
+interface FormController extends FormData{
+    SetVal1:(value:string)=>void
+    SetVal2:(value:string)=>void
+}
 
-            fetchData();
+interface FormProps {
+    form: FormController;
+    OnButtonClick:()=>void;
+}
 
 
-        
-        return () => {
-            // код выполняется при размонтировании компонента (закрытии)
-            console.log('Component unmounted');
-            clearInterval(refreshIntervalId);
-          };
+export function useMainForm(): FormController 
+{
+    const [formState, setFormData] = useState<FormData>({
+        Val1: 'p1',
+        Val2: 'p2'
     });
 
 
-    const ButtonHandler = ()=>
+    const Form: FormController = {
+        ...formState,
+        SetVal1: (value: string) => setFormData(prev => ({ ...prev, Val1: value })),
+        SetVal2: (value: string) => setFormData(prev => ({ ...prev, Val2: value })),
+    }
+
+    return Form;
+}
+
+function Main(  {
+        form,
+        OnButtonClick
+}:FormProps)
+{
+    const ButtonHandler = (event:React.MouseEvent<HTMLAnchorElement>)=>
     {
-        let request:ITestPost = {
-            value1: "Test"
-        };
-
-        $.post("./post_data", request, function(data){
-            // alert("Данные успешно получены");
-            var index;
-
-        })
-        // Обработчик неуспешной отправки данных
-        .fail(function() {
-            alert("Потеря связи с сервером");
-        });
-        // alert( "Handler for `click` called." );
-        
-     
+        OnButtonClick();
     };
 
-    if (loading)
-        {
-            return (
-                <div>Загрузка данных</div>
-            );
-        }
-    else
-    {
-        return (
-                <div className="row">
-                    {/* <div className="row" style={{textAlign: "center"}} id = "loading">
-                        <p>
-                        <div className="col-md-12">
-                            <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        </p>
-                    </div> */}
 
-                    <div className="col-md-12">
-                        <p><h3>Start page</h3></p>
-                    </div>
+    return (
+            <div className="row">
 
-                    <div className="col-md-12">
-                        <p><h3>{val1}</h3></p>
-                    </div>
-
-                    <div className="col-md-12">
-                        <p><h3>{val2}</h3></p>
-                    </div>
-                    <a href="#" className="btn btn-primary" onClick={ButtonHandler} role = "button">Click me</a>
+                <div className="col-md-12">
+                    <p><h3>Start page</h3></p>
                 </div>
-            );
-    }
+
+                <div className="col-md-12">
+                    <p><h3>{form.Val1}</h3></p>
+                </div>
+
+                <div className="col-md-12">
+                    <p><h3>{form.Val2}</h3></p>
+                </div>
+                <a href="#" className="btn btn-primary" onClick={ButtonHandler} role = "button">Click me</a>
+            </div>
+        );
+    
 }
 
 export default Main;
