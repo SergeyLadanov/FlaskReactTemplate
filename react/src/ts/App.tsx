@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 // import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {HashRouter as BrowserRouter, Routes, Route} from 'react-router-dom'; // Навигация по хэш
 import Navbar from '../components/Navbar';
@@ -8,7 +8,26 @@ import MainContainer from '../containers/MainContainer';
 
 const NotFound = () => <h2>404: Страница не найдена</h2>;
 
+function removeLoadingSpinner() {
+  const loadingElement = document.querySelector('.first_loading') as HTMLElement;
+  if (loadingElement) {
+    loadingElement.style.transition = 'opacity 0.5s';
+    loadingElement.style.opacity = '0';
+    setTimeout(() => {
+      loadingElement.remove(); // Удаление после анимации
+    }, 500); // Удалить после завершения анимации
+  }
+}
+
+
+
 function App() {
+
+  useEffect(() => {
+    removeLoadingSpinner(); // Убираем индикатор после загрузки React
+  }, []);
+
+
   return (
     <BrowserRouter>
       <Navbar/>
