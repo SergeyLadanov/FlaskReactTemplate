@@ -9,7 +9,7 @@ import MainContainer from '../containers/MainContainer';
 const NotFound = () => <h2>404: Страница не найдена</h2>;
 
 function removeLoadingSpinner() {
-  const loadingElement = document.getElementById('loading');
+  const loadingElement = document.querySelector('.first_loading') as HTMLElement;
   if (loadingElement) {
     loadingElement.style.transition = 'opacity 0.5s';
     loadingElement.style.opacity = '0';

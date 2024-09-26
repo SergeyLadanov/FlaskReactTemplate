@@ -1,20 +1,8 @@
 <!doctype html><html lang="ru"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content=""><meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors"><meta name="generator" content="Hugo 0.80.0"><title>Bootstrap w/ Webpack</title><link rel="icon" href=".{{ url_for('static', filename='favicon.ico') }}"><script defer="defer" src=".{{ url_for('static', filename='index.js') }}"></script><meta name="theme-color" content="#000000" /><link rel="manifest" href=".{{ url_for('static', filename='manifest.json') }}" />
     <style>
-        /* Сброс стилей по умолчанию */
-        /* * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-        } */
-
         /* Стиль для индикатора загрузки */
-        #loading {
+        .first_loading {
             position: fixed;
             top: 0;
             left: 0;
@@ -23,7 +11,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
+            background-color: #dbeaeb;
             z-index: 9999;
         }
 
@@ -46,7 +34,7 @@
       </style>
 </head>
 <body class="bg-body-tertiary">
-    <div id="loading">
+    <div class="first_loading">
         <!-- SVG индикатор загрузки -->
         <svg class="spinner" viewBox="0 0 50 50">
           <circle
