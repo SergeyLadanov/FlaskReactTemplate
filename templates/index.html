@@ -1,37 +1,49 @@
 <!doctype html><html lang="ru"><head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content=""><meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors"><meta name="generator" content="Hugo 0.80.0"><title>Bootstrap w/ Webpack</title><link rel="icon" href=".{{ url_for('static', filename='favicon.ico') }}"><script defer="defer" src=".{{ url_for('static', filename='index.js') }}"></script><meta name="theme-color" content="#000000" /><link rel="manifest" href=".{{ url_for('static', filename='manifest.json') }}" />
     <style>
-        /* Стиль для индикатора загрузки */
-        .first_loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #dbeaeb;
-            z-index: 9999;
-        }
-
-        /* Анимация вращения */
-        @keyframes spin {
-            0% {
-            transform: rotate(0deg);
-            }
-            100% {
-            transform: rotate(360deg);
-            }
-        }
-
-        /* Стиль для SVG */
-        .spinner {
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-      </style>
+      .first_loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #dbeaeb;
+        z-index: 9999;
+        /* transition: background-color 0.5s; */
+      }
+  
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+  
+      .spinner {
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+      }
+  
+      /* Светлая тема */
+      body.loading-light-theme .first_loading {
+        background-color: #ffffff;
+      }
+  
+      body.loading-light-theme .spinner circle {
+        stroke: #2B3035;
+      }
+  
+      /* Тёмная тема */
+      body.loading-dark-theme .first_loading {
+        background-color: #2B3035;
+      }
+  
+      body.loading-dark-theme .spinner circle {
+        stroke: #ffffff;
+      }
+    </style>
 </head>
 <body class="bg-body-tertiary">
     <div class="first_loading">
@@ -51,4 +63,20 @@
         </svg>
       </div>
     <div id="app"></div>
+    <script>
+      // Проверяем системные настройки темы
+      const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      function applyTheme(theme) {
+        if (theme === 'dark' || (theme === 'auto' && prefersDarkScheme)) {
+          document.body.classList.remove('loading-light-theme');
+          document.body.classList.add('loading-dark-theme');
+        } else {
+          document.body.classList.remove('loading-dark-theme');
+          document.body.classList.add('loading-light-theme');
+        }
+      }
+      // Проверка темы при загрузке страницы
+      const savedTheme = localStorage.getItem('theme') || 'auto'; // default 'auto'
+      applyTheme(savedTheme);
+    </script>
 </body></html>

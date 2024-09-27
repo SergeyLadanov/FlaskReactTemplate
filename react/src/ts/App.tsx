@@ -15,6 +15,8 @@ function removeLoadingSpinner() {
     loadingElement.style.opacity = '0';
     setTimeout(() => {
       loadingElement.remove(); // Удаление после анимации
+      document.body.classList.remove('loading-dark-theme');
+      document.body.classList.remove('loading-light-theme');
     }, 500); // Удалить после завершения анимации
   }
 }
