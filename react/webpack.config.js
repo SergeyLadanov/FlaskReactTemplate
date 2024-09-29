@@ -3,11 +3,11 @@
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 
 module.exports = (env, argv) => {
-  const isProduction = argv.mode === 'production'; // Проверяем режим сборки
+  const isProduction = argv.mode === 'production' // Проверяем режим сборки
 
   return {
     mode: argv.mode || 'development', // режим сборки
@@ -15,13 +15,13 @@ module.exports = (env, argv) => {
     devtool: isProduction ? false : 'source-map', // отключаем source-map для production
     output: {
       filename: './index.js',
-      path: path.resolve(__dirname, '../static'),
+      path: path.resolve(__dirname, '../static')
     },
     devServer: {
       static: path.resolve(__dirname, '../static'),
       port: 8080,
       hot: true,
-      open: true,
+      open: true
     },
     plugins: [
       new WebpackPwaManifest({
@@ -37,13 +37,13 @@ module.exports = (env, argv) => {
         icons: [
           {
             src: path.resolve('public/favicon.ico'),
-            sizes: [128, 256, 512],
-          },
-        ],
+            sizes: [128, 256, 512]
+          }
+        ]
       }),
       new HtmlWebpackPlugin({
         template: './src/index.html',
-        favicon: './public/favicon.ico',
+        favicon: './public/favicon.ico'
       }),
 
       // Подключаем WorkboxWebpackPlugin.GenerateSW только в production режиме
@@ -52,29 +52,29 @@ module.exports = (env, argv) => {
             new WorkboxWebpackPlugin.GenerateSW({
               clientsClaim: true,
               skipWaiting: true,
-              maximumFileSizeToCacheInBytes: 5000000,
-            }),
+              maximumFileSizeToCacheInBytes: 5000000
+            })
           ]
-        : []),
+        : [])
     ],
     module: {
       rules: [
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: ['babel-loader'],
+          use: ['babel-loader']
         },
         {
           test: /\.(ts)x?$/,
           exclude: /node_modules/,
           use: {
-            loader: 'ts-loader',
-          },
+            loader: 'ts-loader'
+          }
         },
         {
           test: /\.s?css$/,
           exclude: /\.module\.css$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
           test: /\.module\.css$/i,
@@ -84,15 +84,15 @@ module.exports = (env, argv) => {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
-              },
-            },
-          ],
-        },
-      ],
+                modules: true
+              }
+            }
+          ]
+        }
+      ]
     },
     resolve: {
-      extensions: ['.ts', '.js', '.tsx'],
-    },
-  };
-};
+      extensions: ['.ts', '.js', '.tsx']
+    }
+  }
+}
